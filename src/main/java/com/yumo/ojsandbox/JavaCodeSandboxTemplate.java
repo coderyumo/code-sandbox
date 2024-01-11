@@ -3,6 +3,7 @@ package com.yumo.ojsandbox;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.dfa.FoundWord;
 import cn.hutool.dfa.WordTree;
 import com.yumo.ojsandbox.model.ExecuteCodeRequest;
 import com.yumo.ojsandbox.model.ExecuteCodeResponse;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,12 +34,29 @@ public abstract class JavaCodeSandboxTemplate implements CodeSandbox{
 
     private static final long TIME_OUT = 5000L;
 
+    private static final List<String> blackList = Arrays.asList("Files", "exec");
+
+    private static final WordTree WORD_TREE;
+
+    static {
+        // 初始化字典树
+        WORD_TREE = new WordTree();
+        WORD_TREE.addWords(blackList);
+    }
     /**
      * 1、保存文件
      * @param code
      * @return
      */
     public File saveCodeToFile(String code){
+
+        //  校验代码中是否包含黑名单中的禁用词
+        FoundWord foundWord = WORD_TREE.matchWord(code);
+        if (foundWord != null) {
+            System.out.println("包含禁止词：" + foundWord.getFoundWord());
+            return null;
+        }
+
         // 1、判断文件夹是否存在
         String userDir = System.getProperty("user.dir");
         String globalCodePathName = userDir + File.separator + GLOBAL_CODE_DIR_NAME;
