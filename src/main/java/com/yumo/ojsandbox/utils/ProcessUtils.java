@@ -14,6 +14,10 @@ import java.util.List;
  */
 public class ProcessUtils {
 
+    public static void main(String[] args) {
+
+    }
+
 
     /**
      * 执行进程并获取信息

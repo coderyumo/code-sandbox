@@ -32,9 +32,11 @@ public class JavaNativeCodeSandbox extends JavaCodeSandboxTemplate {
     public static void main(String[] args) {
         JavaNativeCodeSandbox javaNativeCodeSandbox = new JavaNativeCodeSandbox();
         ExecuteCodeRequest executeCodeRequest = new ExecuteCodeRequest();
-        executeCodeRequest.setInputList(Arrays.asList("1 2", "1 3"));
-        String code = ResourceUtil.readStr("testCode.simpleComputeArgs/Main.java", StandardCharsets.UTF_8);
-        executeCodeRequest.setCode(code);
+//        executeCodeRequest.setInputList(Arrays.asList("1 2", "1 3"));
+//        String codeOne = ResourceUtil.readStr("testCode.simpleComputeArgs/Main.java", StandardCharsets.UTF_8);
+        executeCodeRequest.setInputList(Arrays.asList("2 7 11 15 9"));
+        String codeTwo = ResourceUtil.readStr("testCode.simpleComputeArgsList/Main.java", StandardCharsets.UTF_8);
+        executeCodeRequest.setCode(codeTwo);
         executeCodeRequest.setLanguage("java");
         ExecuteCodeResponse executeCodeResponse = javaNativeCodeSandbox.executeCode(executeCodeRequest);
         System.out.println(executeCodeResponse);
