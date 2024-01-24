@@ -1,14 +1,13 @@
-# 基础镜像
-FROM openjdk:8-jdk-alpine
-  
-# 指定工作目录
+# Docker 镜像构建
+FROM maven:3.5-jdk-8-alpine as builder
+
+# Copy local code to the container image.
 WORKDIR /app
-  
-# 将 jar 包添加到工作目录，
-ADD target/ojsandbox-0.0.1-SNAPSHOT.jar .
-  
-# 暴露端口
-EXPOSE 8090
-  
-# 启动命令
-ENTRYPOINT ["java","-jar","-Xmx256m","/app/ojsandbox-0.0.1-SNAPSHOT.jar","--spring.profiles.active=prod"]
+COPY pom.xml .
+COPY src ./src
+
+# Build a release artifact.
+RUN mvn package -DskipTests
+
+# Run the web service on container startup.
+CMD ["java","-jar","/app/target/code-sandbox-0.0.1-SNAPSHOT.jar","--spring.profiles.active=prod"]
